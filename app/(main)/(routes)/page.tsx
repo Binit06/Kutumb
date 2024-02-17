@@ -7,21 +7,20 @@ export default function Home() {
       <Sheet>
         <div>
           <UserButton 
-          afterSignOutUrl="/"
+          afterSignOutUrl="/sign-up"
           />
           <ModeToggle />
-          <SheetTrigger>
-            <div className="padding-3 border-2 border-neutral-500 rounded-lg">
-            Compete Profile
-            </div>
-          </SheetTrigger>
+          <SheetTrigger>Open</SheetTrigger>
           <SheetContent>
             <SheetHeader>
-              <SheetTitle>Are you absolutely Sure?</SheetTitle>
-              <SheetDescription>This action cannot be undone. This will permanently delete your account and remove your data from our servers.</SheetDescription>
+              <SheetTitle>Are you absolutely sure?</SheetTitle>
+              <SheetDescription>
+                This action cannot be undone. This will permanently delete your account
+                and remove your data from our servers.
+              </SheetDescription>
             </SheetHeader>
           </SheetContent>
         </div>
-      </Sheet>
+        </Sheet>
     );
 }
