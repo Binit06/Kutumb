@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { app, storage } from "@/src/firebase/FirebaseConfig";
 import { UserButton, useAuth, useUser } from "@clerk/nextjs";
-import { createUserWithEmailAndPassword, getAuth, signInWithCustomToken } from "firebase/auth";
-import { addDoc, collection, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth, signInWithCustomToken, updateProfile } from "firebase/auth";
+import { addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import {v4 as uuid} from 'uuid'
@@ -33,11 +33,12 @@ export default function Home() {
 
     const {user} = useUser();
 
+
+
     const [formData, setFormData] = useState({
         user_id: user?.id,
         name: user?.fullName,
         email: user?.emailAddresses[0].emailAddress,
-        password: '',
         userType: '',
         userImage: user?.imageUrl,
         user_location: '',
@@ -50,28 +51,37 @@ export default function Home() {
         user_connection_count: 0,
         sectors: [] as any[],
     });
+
     const [userData, setUserData] = useState<UserData | null>(null);
+
     useEffect(() => {
       const fetchUserData = async () => {
-          const db = getFirestore(app);
-          const userDataCollection = collection(db, 'user_data');
-          const q = query(userDataCollection, where("user_id", "==", user?.id));
-          const snapshot = await getDocs(q);
+        const db = getFirestore(app);
+        const userDataCollection = collection(db, 'user_data');
+        const q = query(userDataCollection, where("user_id", "==", user?.id || ''));
+        const snapshot = await getDocs(q);
+        
+        if (!snapshot.empty) {
           snapshot.forEach(doc => {
-              // Update formData with fetched user data
-              setUserData(doc.data() as UserData);
+            // Update userData with fetched user data
+            setUserData(doc.data() as UserData);
           });
+        } else {
+          // Handle case where no matching document is found
+          console.log('No matching document found for user ID:', user?.id);
+          setUserData(null); // Or setUserData({}) depending on your requirements
+        }
       };
 
       fetchUserData();
-  }, []);
+    }, []);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async () => {
-        console.log(formData);
         const userData = {
           user_email: formData.email,
           user_name: formData.name,
@@ -83,23 +93,39 @@ export default function Home() {
           user_follower_count: 0,
           user_following_count: 0,
           user_image: formData.userImage,
-          user_id: formData.user_id,
+          user_id: user?.id,
           connect_requests: [],
           user_connection_count: 0,
           sectors: [],
         }
-        const auth = getAuth(app)
-        try {
-          await createUserWithEmailAndPassword(auth, formData.email, formData.password)
-        } catch (e) {
-          console.error('Error creating user in Firebase Authentication:', e);
-        }
+        console.log(userData)
+        // const auth = getAuth(app)
+        // try {
+        //   await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+        // } catch (e) {
+        //   console.error('Error creating user in Firebase Authentication:', e);
+        // }
 
         const db = getFirestore(app);
-        try{
-          await addDoc(collection(db, 'user_data'), userData)
+        try {
+          if (userData) {
+            const userDataCollection = collection(db, 'user_data');
+            const q = query(userDataCollection, where('user_id', '==', userData.user_id));
+            const querySnapshot = await getDocs(q);
+      
+            querySnapshot.forEach(async (doc) => {
+              try {
+                await updateDoc(doc.ref, userData);
+                console.log('Profile updated successfully');
+              } catch (e) {
+                console.error('Error updating profile:', e);
+              }
+            });
+          } else {
+            console.error('userData is null');
+          }
         } catch (e) {
-          console.error('Error uploading form data to Firestore:', e);
+          console.error('Error fetching document:', e);
         }
 
     };
@@ -126,20 +152,24 @@ export default function Home() {
     };
     useEffect(() => {
         const storedFileURL = localStorage.getItem('fileURL');
-        if (storedFileURL) {
+        if (storedFileURL && user?.imageUrl === undefined) {
             setFileURL(storedFileURL);
             formData.userImage = storedFileURL
+        } else {
+            setFileURL(user?.imageUrl || '')
+            formData.userImage = storedFileURL || '';
         }
     }, []);
 
     useEffect(() => {
-      if (userData) {
+      if (userData !== null) {
         setFormData(prevData => ({
           ...prevData,
-          name: userData.user_name,
-          email: userData.user_email,
-          userType: userData.user_type,
-          userImage: userData.user_image,
+          user_id: user?.id,
+          name: user?.fullName,
+          email: user?.emailAddresses[0].emailAddress,
+          userType: userData.user_type || 'Volunteer',
+          userImage: user?.imageUrl || userData.user_image,
           user_location: userData.user_location,
           user_followers: userData.user_followers,
           user_following: userData.user_following,
@@ -174,11 +204,11 @@ export default function Home() {
                             <p>Name</p>
                             <Input
                                 name="name"
-                                value={formData.name}
+                                value={formData.name ?? ''}
                                 onChange={handleChange}
                                 placeholder="User Name"
                                 className="w-full py-3 px-2"
-                                disabled={userData?.user_name !== '' ? true: false}
+                                disabled={user?.fullName !== '' ? true: false}
                             />
                         </div>
                         <div className="flex flex-col gap-3">
@@ -190,19 +220,7 @@ export default function Home() {
                                 placeholder="User Email"
                                 className="w-full py-3 px-2"
                                 type="email"
-                                disabled={userData?.user_email !== '' ? true: false}
-                            />
-                        </div>
-                        <div className="flex flex-col gap-3">
-                            <p>Password</p>
-                            <Input
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="User Password"
-                                className="w-full py-3 px-2"
-                                type="password"
-                                disabled={userData ? true: false}
+                                disabled={user?.emailAddresses[0].emailAddress !== '' ? true: false}
                             />
                         </div>
 
@@ -223,7 +241,7 @@ export default function Home() {
                                 className="w-full py-2 px-4 rounded-md border border-neutral-300"
                                 style={{ backgroundColor: formData.userType === "NGO" ? "rgba(0,0,0,0.1)" : "transparent" }}
                                 onClick={() => setFormData({ ...formData, userType: "NGO" })}
-                                disabled={userData?.user_type !== '' ? true: false}
+                                disabled={false}
                               >
                                 NGO
                               </button>
@@ -234,7 +252,7 @@ export default function Home() {
                                 className="w-full py-2 px-4 rounded-md border border-neutral-300"
                                 style={{ backgroundColor: formData.userType === "Volunteer" ? "rgba(0,0,0,0.1)" : "transparent" }}
                                 onClick={() => setFormData({ ...formData, userType: "Volunteer" })}
-                                disabled={userData?.user_type !== '' ? true: false}
+                                disabled={false}
                               >
                                 Volunteer
                               </button>
@@ -246,7 +264,7 @@ export default function Home() {
                         
                         <div className="flex flex-col gap-3">
                             {userData ? (
-                              <Button onClick={() => {}}>Update Profile</Button>
+                              <Button onClick={handleSubmit}>Update Profile</Button>
                             ):(
                               <Button onClick={handleSubmit}>Proceed</Button>
                             )}
