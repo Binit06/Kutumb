@@ -6,6 +6,9 @@ import { Input } from '@/components/ui/input';
 import { useUser } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { app } from '@/src/firebase/FirebaseConfig';
+import { v4 as uuid} from 'uuid'
 
 export default function CampaignPage() {
     const [selectedCause, setSelectedCause] = useState('Animal');
@@ -21,6 +24,13 @@ export default function CampaignPage() {
         ngo_name: '',
         state: '',
         district: '',
+        campaign_name: '',
+        campaign_description: '',
+        description: '',
+        amount: 0,
+        user_id: '',
+        fund_id: uuid(),
+        timestampz: new Date(),
     });
 
     const handleCauseChange = (value: any) => {
@@ -46,9 +56,44 @@ export default function CampaignPage() {
         }));
     };
 
-    const handleSubmit = () => {
+    const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+          ...prevData,
+          [name]: value
+        }));
+      };
+      
+
+      const handleSubmit = async () => {
+        
+        setFormData(prevData => ({
+            ...prevData,
+            timestampz: new Date()
+        }));
         console.log(formData);
+        if(!user?.id){
+            console.log("No User Id Found")
+            return
+        }
+    
+        const db = getFirestore(app);
+        try {
+            // Check if formData contains any undefined values
+            if (Object.values(formData).some(value => value === undefined)) {
+                console.log('Form data contains undefined values');
+                return;
+            }
+    
+            const userDataCollection = collection(db, 'products');
+            await addDoc(userDataCollection, formData);
+            console.log('Product Updated');
+        } catch (e) {
+            console.log(e);
+        }
     };
+    
+    
 
     const handlePageOneSubmit = () => {
         console.log(formData)
@@ -68,9 +113,10 @@ export default function CampaignPage() {
     const handleAutoFill = () => {
         setFormData(prevData => ({
             ...prevData,
-            email: user?.emailAddresses[0].emailAddress || '',
-            name: user?.fullName || '',
-            phoneNumber: user?.phoneNumbers[0].phoneNumber || ''
+            email: user?.emailAddresses[0].emailAddress ?? '',
+            name: user?.fullName ?? '',
+            phoneNumber: user?.phoneNumbers[0].phoneNumber ?? '',
+            user_id: user?.id ?? ''
         }));
     };
     
@@ -202,6 +248,32 @@ export default function CampaignPage() {
                     <div className='w-full border-2 border-black rounded-md border-dashed h-full grid place-content-center'>
                         <Input type='file'/>
                     </div>
+                </div>
+                <div className='w-full mt-2 flex-col gap-3'>
+                    <div className='flex-1 px-1'>Campaign Title</div>
+                    <Input name="campaign_name" placeholder='Enter Campaign Name' required autoFocus={false} className='mt-1' value={formData.campaign_name} onChange={handleChange} />
+                </div>
+                <div className='w-full mt-2 flex-col gap-3 px-1'>
+                    <div className='flex-1'>Campaign Description</div>
+                    {/* <Input name="description" placeholder='Enter Campaign Description' required autoFocus={false} className='mt-1' value={formData.description} onChange={handleChange} multiple/> */}
+                    <textarea
+                    name="campaign_description"
+                    placeholder="Enter Campaign Description"
+                    required
+                    autoFocus={false}
+                    className="mt-1"
+                    value={formData.campaign_description}
+                    onChange={handleTextAreaChange}
+                    rows={5} // Specify the number of rows (lines) you want
+                    style={{width: '100%', padding: '5px'}}
+                    />
+
+                </div>
+                <div className='mt-2 w-full '>
+                    <Input type='number' placeholder='Enter Fund Amount You Want to Raise n Ruppees' name='amount' onChange={handleChange} value={formData.amount}/>
+                </div>
+                <div className='w-full mt-2'>
+                    <Button variant={'secondary'} className='w-full' onClick={handleSubmit}>Create Campaign</Button>
                 </div>
             </div>
         </div>
