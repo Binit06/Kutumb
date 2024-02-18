@@ -5,11 +5,35 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { app, storage } from "@/src/firebase/FirebaseConfig";
 import { UserButton, useAuth, useUser } from "@clerk/nextjs";
+import Stripe from "stripe";
 import { createUserWithEmailAndPassword, getAuth, signInWithCustomToken, updateProfile } from "firebase/auth";
 import { addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import {v4 as uuid} from 'uuid'
+
+export interface Fundraisers {
+  fund_captions?: string | undefined;
+  name?: string;
+  fund_id: string;
+  imgUrl?: string;
+  active?: boolean;
+  metadata?: Stripe.Metadata;
+}
+
+export interface Price {
+  id: string;
+  product_id?: string;
+  active?: boolean;
+  description?: string;
+  unit_amount?: number;
+  currency?: string;
+  type?: Stripe.Price.Type;
+  interval?: Stripe.Price.Recurring.Interval;
+  interval_count?: number;
+  trial_period_daya?: number | null;
+  metadata?: Stripe.Metadata;
+}
 
 interface UserData {
   // Define the structure of your user data here
