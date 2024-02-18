@@ -1,5 +1,6 @@
 "use client"
 
+import Hero from "@/components/Hero/Hero";
 import { ModeToggle } from "@/components/mode-toogle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -11,6 +12,7 @@ import { addDoc, collection, doc, getDocs, getFirestore, query, updateDoc, where
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import {v4 as uuid} from 'uuid'
+import We from "../../../components/We/We"
 
 export interface Fundraisers {
   fund_captions?: string | undefined;
@@ -208,7 +210,7 @@ export default function Home() {
     }, [userData]);
     return (
         <Sheet>
-            <div>
+            <div className="flex flex-row absolute">
                 <div className="flex flex-row gap-3 p-2 rounded-3xl border-neutral-300 border-2 w-fit bg-neutral-100">
                     <UserButton afterSignOutUrl="/" />
                     <SheetTrigger><div className="font-semibold">Profile</div></SheetTrigger>
@@ -253,7 +255,7 @@ export default function Home() {
                             <div className="w-full h-[140px] border-2 border-dashed border-neutral-200 rounded-md grid place-content-center">
                               {fileURL ? (<p>Picture Uploaded</p>):(<Input type="file" accept=".png, .jpeg, .jpg" onChange={(e) => setFileUpload(e.target.files)}/>)}
                             </div>
-                            {fileURL? (null):(<Button className="absolute bottom-0 right-0" variant={"outline"} onClick={upload}>Upload</Button>)}
+                            {fileURL? (null):(<Button className="absolute bottom-0 right-0" onClick={upload}>Upload</Button>)}
                         </div>
 
                         <div className="flex flex-col gap-3">
@@ -296,6 +298,12 @@ export default function Home() {
                     </div>
                 </SheetContent>
                 <ModeToggle />
+            </div>
+            <div>
+              <Hero/>
+            </div>
+            <div>
+              <We/>
             </div>
         </Sheet>
     );
