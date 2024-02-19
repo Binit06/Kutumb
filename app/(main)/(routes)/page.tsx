@@ -297,7 +297,9 @@ export default function Home() {
                         </div>
                     </div>
                 </SheetContent>
-                <ModeToggle />
+                <div>
+                  <ModeToggle />
+                </div>
             </div>
             <div>
               <Hero/>

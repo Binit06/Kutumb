@@ -18,7 +18,7 @@ const useGetPosts = ()=>{
         //   return;
         // }
 
-        const get = query(collection(db,"post_data"))
+        const get = query(collection(db,"products"))
 
         try {
           

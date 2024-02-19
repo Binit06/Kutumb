@@ -13,7 +13,7 @@ const page = () => {
             <h1 className='text-[30px] font-semibold'>Top Raisers</h1>
             <div className='mt-[50px] grid lg:grid-cols-3 gap-[30px] md:grid-cols-2 sm:grid-cols-1 px-28'>
                 {posts.map((item: any, index:any) => (
-                    <Donations_card key={index} hash={item.hashtags?.[0]} title={item.post_type} images={item.post_images?.[0]} desc={item.post_content}/>
+                    <Donations_card key={index} hash={item.campaign_name?.[0]} title={item.post_type} images={""} desc={item.campaign_description}/>
                 ))}
             </div>
         </div>
