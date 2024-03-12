@@ -9,6 +9,10 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app } from '@/src/firebase/FirebaseConfig';
 import { v4 as uuid} from 'uuid'
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+import { Router } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function CampaignPage() {
     const [selectedCause, setSelectedCause] = useState('Animal');
@@ -56,6 +60,7 @@ export default function CampaignPage() {
         }));
     };
 
+    const { toast } = useToast()
     const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData(prevData => ({
@@ -64,7 +69,7 @@ export default function CampaignPage() {
         }));
       };
       
-
+      const router = useRouter();
       const handleSubmit = async () => {
         
         setFormData(prevData => ({
@@ -87,9 +92,10 @@ export default function CampaignPage() {
     
             const userDataCollection = collection(db, 'products');
             await addDoc(userDataCollection, formData);
-            console.log('Product Updated');
+            toast({variant: 'default', title: 'Campaign Added Succesfully', description: 'Please navigate to posts section to see your post', action: <ToastAction altText='Return Home' onClick={() => {router.push('/')}}>Return Home</ToastAction>})
         } catch (e) {
             console.log(e);
+            toast({variant: 'default', title: 'Campaign Addtion Failed', description: 'Please try again', action: <ToastAction altText='Try Again' onClick={handleSubmit}>Try Again</ToastAction>})
         }
     };
     

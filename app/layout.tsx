@@ -5,6 +5,7 @@ import {ClerkProvider} from '@clerk/nextjs'
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { cn } from "@/lib/utils";
 import { Sheet } from "lucide-react";
+import { Toaster } from "@/components/ui/toaster";
 
 const fonts = Open_Sans({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning={true}>
         <body className={cn(fonts.className, "bg-[#f7f0cc] dark:bg-[#313338]")}>
+          <Toaster />
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
