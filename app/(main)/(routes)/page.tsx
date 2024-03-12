@@ -13,6 +13,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useEffect, useState } from "react";
 import {v4 as uuid} from 'uuid'
 import We from "../../../components/We/We"
+import { useRouter } from "next/navigation";
 
 export interface Fundraisers {
   fund_captions?: string | undefined;
@@ -59,8 +60,7 @@ export default function Home() {
 
     const {user} = useUser();
 
-
-
+    const router = useRouter()
     const [formData, setFormData] = useState({
         user_id: user?.id,
         name: user?.fullName,
@@ -101,6 +101,10 @@ export default function Home() {
 
       fetchUserData();
     }, []);
+
+    const handleAddCampaign = () => {
+      router.push('/Campaign')
+    }
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -215,6 +219,8 @@ export default function Home() {
                     <UserButton afterSignOutUrl="/" />
                     <SheetTrigger><div className="font-semibold">Profile</div></SheetTrigger>
                 </div>
+                <Button variant={'secondary'} onClick={handleAddCampaign} className="mt-1 ml-4">Create Campaign</Button>
+                <ModeToggle />
                 <div>
                   {userData?.user_name}
                 </div>
@@ -297,9 +303,6 @@ export default function Home() {
                         </div>
                     </div>
                 </SheetContent>
-                <div>
-                  <ModeToggle />
-                </div>
             </div>
             <div>
               <Hero/>

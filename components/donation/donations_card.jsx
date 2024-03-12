@@ -18,11 +18,10 @@ const donations_card = (props) => {
     <div className="relative flex w-[400px] flex-col rounded-xl bg-[#f7f0cc] bg-clip-border text-gray-700 transition-all shadow-md hover:scale-105 focus:scale-105 hover:bg-[#fff1ad]">
       <div className="relative mx-4 mt-4 h-[300px] rounded-xl bg-white bg-clip-border text-gray-700">
         <Image
+        fill
         alt="pic"
-        width={50}
-        height={50}
           src={props.images}
-          className="h-full w-full object-cover"
+          className=""
         />
       </div>
       <div className="p-6">

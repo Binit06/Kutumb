@@ -13,7 +13,7 @@ const page = () => {
             <h1 className='text-[30px] font-semibold'>Top Raisers</h1>
             <div className='mt-[50px] grid lg:grid-cols-3 gap-[30px] md:grid-cols-2 sm:grid-cols-1 px-28'>
                 {posts.map((item: any, index:any) => (
-                    <Donations_card key={index} hash={item.campaign_name?.[0]} title={item.post_type} images={""} desc={item.campaign_description}/>
+                    <Donations_card key={index} hash={item.campaign_name} title={item.post_type} images={"https://images.unsplash.com/photo-1542627088-6603b66e5c54?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} desc={item.campaign_description} requiredamount = {item.amount}/>
                 ))}
             </div>
         </div>
