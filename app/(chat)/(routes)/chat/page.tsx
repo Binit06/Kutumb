@@ -346,7 +346,7 @@ export default function Chat() {
                             {formData.chat_room_name}
                         </div>
                         <div className="font-thin text-sm">
-                            {formData.chat_room_id}
+                            Invite ID : {formData.chat_room_id}
                         </div>
                     </div>
                     <div className="absolute w-full top-28 px-2 flex flex-col gap-3">
