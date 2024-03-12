@@ -11,7 +11,6 @@ import { app } from '@/src/firebase/FirebaseConfig';
 import { v4 as uuid} from 'uuid'
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
-import { Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function CampaignPage() {

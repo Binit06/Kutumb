@@ -10,7 +10,7 @@ const DonationCard = (props: any) => {
   const {push} = useRouter();
 
   const handleClick1 = ()=>{
-    push('/donate');
+    push(`/donate?campaign=${props.id}`);
   }
 
 
