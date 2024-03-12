@@ -9,9 +9,11 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app } from '@/src/firebase/FirebaseConfig';
 import { v4 as uuid} from 'uuid'
+import { useRouter } from 'next/navigation';
 
 export default function CampaignPage() {
     const [selectedCause, setSelectedCause] = useState('Animal');
+    const router = useRouter();
     const { user } = useUser();
     const [formData, setFormData] = useState({
         cause: 'Animal',
@@ -88,6 +90,7 @@ export default function CampaignPage() {
             const userDataCollection = collection(db, 'products');
             await addDoc(userDataCollection, formData);
             console.log('Product Updated');
+            router.push('/')
         } catch (e) {
             console.log(e);
         }
