@@ -100,7 +100,7 @@ export default function Home() {
       };
 
       fetchUserData();
-    }, []);
+    }, [user?.id]);
 
     const handleAddCampaign = () => {
       router.push('/Campaign')
@@ -189,7 +189,7 @@ export default function Home() {
             setFileURL(user?.imageUrl || '')
             formData.userImage = storedFileURL || '';
         }
-    }, []);
+    }, [formData, user?.imageUrl]);
 
     useEffect(() => {
       if (userData !== null) {
@@ -211,7 +211,7 @@ export default function Home() {
           sectors: userData.sectors,
         }));
       }
-    }, [userData]);
+    });
     return (
         <Sheet>
             <div className="flex flex-row absolute">

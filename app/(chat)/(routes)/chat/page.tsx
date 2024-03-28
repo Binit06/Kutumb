@@ -205,7 +205,7 @@ export default function Chat() {
     };
     useEffect(() => {
         fetchMessages();
-    }, [formData.chat_room_id]);
+    }, []);
 
     return (
         <Dialog>

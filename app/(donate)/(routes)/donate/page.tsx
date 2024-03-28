@@ -107,7 +107,7 @@ export default function DonatePage() {
             }
         };
         fetchData();
-    }, [campaignId])
+    }, [campaignId, userId, hasPaid])
 
     const { toast } = useToast();
 
@@ -160,7 +160,7 @@ export default function DonatePage() {
                 <div className="w-full h-80 p-7 flex justify-center items-center relative">
                     <div className="absolute text-center w-full top-0 text-2xl font-semibold">Donaters Feedback</div>
                     <div className="shadow-md shadow-black rounded-md w-full px-3 py-16 text-center">
-                        Thank you for your generous donation to Paws for a Cause: Supporting Our Furry Friends. Your support fuels our mission at Wings for Dreams, and we're grateful for your kindness and belief in our work.
+                        {"Thank you for your generous donation to Paws for a Cause: Supporting Our Furry Friends. Your support fuels our mission at Wings for Dreams, and we're grateful for your kindness and belief in our work."}
                     </div>
                 </div>
                 <div className="w-full flex flex-row gap-5 px-7">
