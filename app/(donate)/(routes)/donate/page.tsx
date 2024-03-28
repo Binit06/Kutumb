@@ -139,36 +139,36 @@ export default function DonatePage() {
     return (
         <div className="w-full h-[100vh] flex flex-row">
             <div className="w-[60%] bg-white px-5 flex flex-col gap-3 py-3 overflow-auto">
-                <div className="w-full h-full relative">
-                    <Image src={'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'} fill alt="" className="rounded-md"/>
+                <div className="w-full h-fit relative">
+                    <Image src={'https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'} alt="" className="rounded-md aspect-auto" width={1000} height={20}/>
                 </div>
                 <h1 className="text-black text-2xl font-bold">{campaignData?.campaign_name}</h1>
                 <div className="text-black">{campaignData?.campaign_description}</div>
             </div>
             <div className="w-[40%] bg-white p-3">
                 <div className="w-full p-2 flex flex-row gap-4">
-                    <div className="rounded-md justify-center border-2 border-neutral-200 p-4">{campaignData?.district}, {campaignData?.state}</div>
-                    <div className="flex-1 rounded-md justify-center text-center border-2 font-semibold p-4">Target Amount : {campaignData?.amount}</div>
+                    <div className="rounded-md justify-center border-2 border-neutral-200 p-4 text-black">{campaignData?.district}, {campaignData?.state}</div>
+                    <div className="flex-1 rounded-md justify-center text-center border-2 font-semibold p-4 text-black">Target Amount : {campaignData?.amount}</div>
                 </div>
-                <div className="w-full p-3 rounded-md overflow-hidden text-center text-sm">
+                <div className="w-full p-3 rounded-md overflow-hidden text-center text-sm text-black">
                     {campaignData?.benefit === 'NGO' ? (
-                        <p>This program is termed to benefit NGO - {campaignData.ngo_name} for supporting {campaignData.cause}</p>
+                        <p>This program is termed to benefit NGO - <span className="font-bold text-lg">{campaignData.ngo_name}</span> for supporting <span className="font-bold text-lg">{campaignData.cause}</span></p>
                     ):(
-                        <p>This program is termed to benefit {campaignData?.name} for supporting {campaignData?.cause}</p>
+                        <p>This program is termed to benefit <span className="font-bold text-lg">{campaignData?.name}</span> for supporting <span className="font-bold text-lg">{campaignData?.cause}</span></p>
                     )}
                 </div>
                 <div className="w-full h-80 p-7 flex justify-center items-center relative">
-                    <div className="absolute text-center w-full top-0 text-2xl font-semibold">Donaters Feedback</div>
-                    <div className="shadow-md shadow-black rounded-md w-full px-3 py-16 text-center">
+                    <div className="absolute text-center w-full top-0 text-2xl font-semibold text-black">{"Donater's Feedback"}</div>
+                    <div className="shadow-md shadow-black rounded-md w-full px-3 py-16 text-center text-black">
                         {"Thank you for your generous donation to Paws for a Cause: Supporting Our Furry Friends. Your support fuels our mission at Wings for Dreams, and we're grateful for your kindness and belief in our work."}
                     </div>
                 </div>
-                <div className="w-full flex flex-row gap-5 px-7">
+                <div className="w-full flex flex-row gap-2 px-7">
                     <div className="flex-1">
-                        <Input type="number" placeholder="Enter the amount you want to donate" className="border-black border-2" onChange={(e) => setDonationAmount(parseFloat(e.target.value))}></Input>
+                        <Input type="number" placeholder="Enter the amount you want to donate" className="border-black border-2 bg-white text-black text-xl font-semibold p-8 focus:outline-0" onChange={(e) => setDonationAmount(parseFloat(e.target.value))}></Input>
                     </div>
-                    <div className="w-[20%]">
-                        <Button variant={'secondary'} onClick={handleDonation}>Donate</Button>
+                    <div className="text-xl">
+                        <Button variant={'secondary'} onClick={handleDonation} className="h-full text-xl">Donate</Button>
                     </div>
                 </div>
             </div>

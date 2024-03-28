@@ -46,7 +46,7 @@ const DonationCard = (props: any) => {
         >
           Donate Now
         </Button>
-        <Button variant={'outline'}>
+        <Button variant={'outline'} className='text-white'>
           Target : {props.amount}
         </Button>
       </div>

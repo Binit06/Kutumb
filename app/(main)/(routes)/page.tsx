@@ -213,14 +213,14 @@ export default function Home() {
       }
     });
     return (
+      <div className="overflow-hidden h-screen">
         <Sheet>
-            <div className="flex flex-row absolute">
-                <div className="flex flex-row gap-3 p-2 rounded-3xl border-neutral-300 border-2 w-fit bg-neutral-100">
+            <div className="flex flex-row absolute items-center w-full">
+                <div className="flex flex-row gap-3 p-3 rounded-xl border-neutral-300 border-2 w-fit bg-neutral-900/70">
                     <UserButton afterSignOutUrl="/" />
                     <SheetTrigger><div className="font-semibold">Profile</div></SheetTrigger>
                 </div>
-                <Button variant={'secondary'} onClick={handleAddCampaign} className="mt-1 ml-4">Create Campaign</Button>
-                <ModeToggle />
+                <Button variant={'secondary'} onClick={handleAddCampaign} className="ml-4">Create Campaign</Button>
                 <div>
                   {userData?.user_name}
                 </div>
@@ -304,12 +304,13 @@ export default function Home() {
                     </div>
                 </SheetContent>
             </div>
-            <div>
+            <div className="overflow-hidden">
               <Hero/>
             </div>
             <div>
               <We/>
             </div>
         </Sheet>
+      </div>
     );
 }

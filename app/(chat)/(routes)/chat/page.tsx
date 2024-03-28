@@ -82,6 +82,7 @@ export default function Chat() {
         const querySnapshot = await getDocs(adminGroupsQuery);
         const groupsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setAdminGroups(groupsData);
+        await fetchMemberGroups()
     };
     const fetchMemberGroups = async () => {
         const db = getFirestore(app);
@@ -205,18 +206,40 @@ export default function Chat() {
     };
     useEffect(() => {
         fetchMessages();
-    }, []);
+    });
 
     return (
         <Dialog>
             <div className="w-full h-[100vh] flex flex-row">
-                <div className="w-[20%] h-full bg-[#00585c] relative">
+                <div className="w-[20%] h-full bg-[#292524] relative">
                     <div className="p-3 flex flex-row gap-5 align-middle h-[7vh]">
                         <div className="flex align-middle justify-center">
                             <UserButton />
                         </div>
                     </div>
                     <div className="absolute top-2 right-2">
+                        <Dialog>
+                        <DialogTrigger>
+                            <Button variant={'secondary'} className="w-full">Join A Group</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Join A Group</DialogTitle>
+                                <DialogDescription>Only the groups that are public can be joined</DialogDescription>
+                            </DialogHeader>
+                            <Input 
+                                placeholder="Enter Group Id"
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroupId(e.target.value)}
+                                value={groupid}
+                                required
+                            />
+
+                            <div className="w-full flex flex-row justify-between">
+                                <Button variant={'destructive'}>Discard</Button>
+                                <Button variant={'outline'} onClick={() => {handleJoinGroup(groupid)}}>Join</Button>
+                            </div>
+                        </DialogContent>
+                        </Dialog>
                         <DialogTrigger>
                             <Button variant={'outline'}>Create Group</Button>
                         </DialogTrigger>
@@ -282,10 +305,10 @@ export default function Chat() {
                                                 <AvatarImage src="https://github.com/shadcn.png"/>
                                                 <AvatarFallback>CN</AvatarFallback>
                                             </Avatar>
-                                            <div>
+                                            <div className="text-black text-lg">
                                                 {value.chat_room_name}
                                             </div>
-                                            <Button variant={'link'} onClick={() => {handleSetFormData(value.chat_room_name, value.chat_room_id)}}>
+                                            <Button variant={'link'} onClick={() => {handleSetFormData(value.chat_room_name, value.chat_room_id); fetchMessages();}} className="text-indigo-500">
                                                 View Room
                                             </Button>
 
@@ -294,59 +317,34 @@ export default function Chat() {
                                 </div>
                             </TabsContent>
                             <TabsContent value="member">
-                            <Dialog>
-                                <div className="w-full flex flex-row gap-2">
-                                        <DialogTrigger>
-                                            <Button variant={'secondary'} className="w-full">Join A Group</Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>Join A Group</DialogTitle>
-                                                <DialogDescription>Only the groups that are public can be joined</DialogDescription>
-                                            </DialogHeader>
-                                            <Input 
-                                                placeholder="Enter Group Id"
-                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroupId(e.target.value)}
-                                                value={groupid}
-                                                required
-                                            />
-
-                                            <div className="w-full flex flex-row justify-between">
-                                                <Button variant={'destructive'}>Discard</Button>
-                                                <Button variant={'outline'} onClick={() => {handleJoinGroup(groupid)}}>Join</Button>
-                                            </div>
-                                        </DialogContent>
-                                    <Button variant={'outline'} onClick={fetchMemberGroups}>R</Button>
-                                </div>
-                                <div className="flex flex-col gap-2 mt-3">
-                                    {memberGroups.map((value, index) => (
-                                        <div key={index} className="p-2 rounded-md bg-white flex flex-row align-middle gap-3">
-                                            <Avatar>
-                                                <AvatarImage src="https://github.com/shadcn.png"/>
-                                                <AvatarFallback>CN</AvatarFallback>
-                                            </Avatar>
-                                            <div>
-                                                {value.chat_room_name}
-                                            </div>
-                                            <Button variant={'link'} onClick={() => {handleSetFormData(value.chat_room_name, value.chat_room_id)}}>
-                                                View Room
-                                            </Button>
-
+                            <div className="flex flex-col gap-2 mt-3">
+                                {memberGroups.map((value, index) => (
+                                    <div key={index} className="p-2 rounded-md bg-white flex flex-row align-middle gap-3">
+                                        <Avatar>
+                                            <AvatarImage src="https://github.com/shadcn.png"/>
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+                                        <div className="text-black text-lg">
+                                            {value.chat_room_name}
                                         </div>
-                                    ))}
-                                </div>
-                                </Dialog>
+                                        <Button variant={'link'} onClick={() => {handleSetFormData(value.chat_room_name, value.chat_room_id); fetchMessages()}} className="text-indigo-500">
+                                            View Room
+                                        </Button>
+
+                                    </div>
+                                ))}
+                            </div>
                             </TabsContent>
                         </Tabs>
                     </div>
                 </div>
                 <div className="flex-1 w-full h-full bg-[#FFE49D] relative">
                     <div className="absolute px-4 py-5 bg-white w-full rounded-b-md font-semibold text-xl flex flex-col gap-1">
-                        <div>
+                        <div className="text-black text-2xl font-bold">
                             {formData.chat_room_name}
                         </div>
-                        <div className="font-thin text-sm">
-                            Invite ID : {formData.chat_room_id}
+                        <div className="font-thin text-sm text-black">
+                            <span className="text-neutral-900/40">Invite ID </span>: {formData.chat_room_id}
                         </div>
                     </div>
                     <div className="absolute w-full top-28 px-2 flex flex-col gap-3">
@@ -354,10 +352,10 @@ export default function Chat() {
                             .slice() // Create a copy of the array to avoid mutating the original array
                             .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()) // Sort the messages by timestamp
                             .map((message, index) => (
-                                <div key={index} className={`p-2 rounded-md ${message.admin ? 'bg-[rgba(2,210,207,0.6)]' : 'bg-neutral-100'} relative`}>
-                                    <div className={`${message.admin ? 'font-bold': ''}`}>{message.message}</div>
-                                    <div className="text-xs text-gray-500">{message.timestamp}</div>
-                                    <div className="absolute right-2 top-2 font-semibold">{message.user_name}</div>
+                                <div key={index} className={`pl-2 pr-8 py-2 rounded-md ${message.admin ? 'bg-[rgba(2,210,207,0.6)]' : 'bg-neutral-100'} relative`}>
+                                    <div className={`${message.admin && message.message !== '' ? 'font-bold': 'font-thin'} text-black`}>{message.message === '' ? "This Message was deleted by admin" : message.message}</div>
+                                    <div className="text-xs text-gray-500 mt-2">{new Date(message.timestamp).getDate()}/{new Date(message.timestamp).getMonth()+1}/{new Date(message.timestamp).getFullYear()}</div>
+                                    <div className="absolute right-6 top-2 font-semibold text-black">{message.user_name}</div>
                                 </div>
                         ))}
                     </div>
