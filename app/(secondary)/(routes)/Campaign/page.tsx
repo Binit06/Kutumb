@@ -128,14 +128,14 @@ export default function CampaignPage() {
 
     return (
         <div className="w-full h-screen flex justify-center items-center bg-[#e9f6fc]">
-            <IoIosArrowBack size={30} className={`${page === 1 ? "hidden" : ""} cursor-pointer`} onClick={() => { setPage(page - 1) }} />
+            <IoIosArrowBack size={30} color='black' className={`${page === 1 ? "hidden" : ""} cursor-pointer`} onClick={() => { setPage(page - 1) }} />
             <div className={`max-w-[30rem] w-full bg-white shadow-md rounded-3xl py-5 px-8 ${page === 1 ? "" : "hidden"}`}>
-                <div className="font-normal text-2xl text-center mb-4">Basic Details</div>
-                <div className="text-lg text-center mb-4">The fund is being raised for <span className="font-bold">{selectedCause}</span> cause</div>
+                <div className="font-normal text-2xl text-center mb-4 text-black">Basic Details</div>
+                <div className="text-lg text-center mb-4 text-black">The fund is being raised for <span className="font-bold">{selectedCause}</span> cause</div>
                 <div className="flex justify-center">
                     <div className="w-[27rem] border-2 shadow-neutral-200 shadow-sm py-4 rounded-md px-3 flex items-center">
-                        <div className="text-center py-2 mr-2 rounded-sm">Choose Cause</div>
-                        <div className="border-1 border-black flex-1 text-center ml-2 rounded-sm">
+                        <div className="text-center py-2 mr-2 rounded-sm text-black">Choose Cause</div>
+                        <div className="border-1 border-black flex-1 text-center ml-2 rounded-sm bg-white">
                             <Select onValueChange={(value) => { handleCauseChange(value) }}>
                                 <SelectTrigger><SelectValue placeholder={selectedCause}></SelectValue></SelectTrigger>
                                 <SelectContent>
@@ -156,27 +156,27 @@ export default function CampaignPage() {
                         </div>
                     </div>
                 </div>
-                <div className='mt-2 w-full'>
-                    <Button variant={'secondary'} onClick={handleAutoFill}>Auto Fill</Button>
+                <div className='mt-2 w-full bg-white'>
+                    <Button variant={'secondary'} onClick={handleAutoFill} className='text-white'>Auto Fill</Button>
                 </div>
                 <div className='w-full mt-2 flex-col gap-3'>
-                    <div className='flex-1 px-1'>Your name</div>
-                    <Input name="name" placeholder='Enter your Name' required autoFocus={false} className='mt-1' value={formData.name} onChange={handleChange} />
+                    <div className='flex-1 px-1 text-black'>Your name</div>
+                    <Input name="name" placeholder='Enter your Name' required autoFocus={false} className='mt-1 bg-white text-black' value={formData.name} onChange={handleChange}/>
                 </div>
                 <div className='w-full mt-2 flex-col gap-3'>
-                    <div className='flex-1 px-1'>Your email</div>
-                    <Input name="email" placeholder='Enter your E-Mail' required autoFocus={false} className='mt-1' value={formData.email} onChange={handleChange} />
+                    <div className='flex-1 px-1 text-black'>Your email</div>
+                    <Input name="email" placeholder='Enter your E-Mail' required autoFocus={false} className='mt-1 bg-white text-black' value={formData.email} onChange={handleChange} />
                 </div>
                 <div className='w-full mt-5 flex-col gap-3'>
-                    <div className='flex-1 px-1'>Phone Number</div>
-                    <Input name="phoneNumber" placeholder='Enter your Mobile Number' required autoFocus={false} className='mt-1' value={formData.phoneNumber} onChange={handleChange} />
+                    <div className='flex-1 px-1 text-black'>Phone Number</div>
+                    <Input name="phoneNumber" placeholder='Enter your Mobile Number' required autoFocus={false} className='mt-1 bg-white text-black' value={formData.phoneNumber} onChange={handleChange} />
                 </div>
                 <Button variant={'default'} className='w-full mt-4' onClick={handlePageOneSubmit}>Continue</Button>
             </div>
             <div className={`max-w-[30rem] w-full bg-white shadow-md rounded-3xl py-5 px-8 ${page === 2 ? "" : "hidden"}`}>
-                <div className="font-normal text-2xl text-center mb-4">NGO / Individual Details</div>
+                <div className="font-normal text-2xl text-center mb-4 text-black">NGO / Individual Details</div>
                 <div className='w-full mt-2 flex-col gap-3'>
-                    <div className='flex-1 px-1'>The fundraiser will benefit</div>
+                    <div className='flex-1 px-1 text-black'>The fundraiser will benefit</div>
                     <Select onValueChange={(value) => { handleBenefitChange(value) }}>
                         <SelectTrigger><SelectValue placeholder={formData.benefit}></SelectValue></SelectTrigger>
                         <SelectContent>
@@ -188,33 +188,33 @@ export default function CampaignPage() {
                 </div>
                 {formData.benefit === 'NGO' ? (
                     <div className='w-full mt-2 flex-col gap-3'>
-                        <div className='flex-1 px-1'>Individual name</div>
+                        <div className='flex-1 px-1 text-black'>Individual name</div>
                         <Input name="ngo_name" placeholder='Enter NGO Name' required autoFocus={false} className='mt-1' value={formData.ngo_name} onChange={handleChange} />
                     </div>
                 ) : formData.benefit === 'Individual_Other_Than_Self' ? (
                     <div>
                         <div className='w-full mt-2 flex-col gap-3'>
-                            <div className='flex-1 px-1'>Individual name</div>
+                            <div className='flex-1 px-1 text-black'>Individual name</div>
                             <Input name="other_individual" placeholder='Enter Name' required autoFocus={false} className='mt-1' value={formData.other_individual} onChange={handleChange} />
                         </div>
                         <div className='w-full mt-5 flex-col gap-3'>
-                            <div className='flex-1 px-1'>Individuals Phone Number</div>
+                            <div className='flex-1 px-1 text-black'>Individuals Phone Number</div>
                             <Input name="other_number" placeholder='Enter Mobile Number' required autoFocus={false} className='mt-1' value={formData.other_number} onChange={handleChange} />
                         </div>
                     </div>
                 ) : (
                     <div>
                         <div className='w-full mt-2 flex-col gap-3'>
-                            <div className='flex-1 px-1'>Your name</div>
+                            <div className='flex-1 px-1 text-black'>Your name</div>
                             <Input name="name" placeholder='Enter your Name' required autoFocus={false} className='mt-1' value={formData.name} onChange={handleChange} />
                         </div>
                         <div className='w-full mt-5 flex-col gap-3'>
-                            <div className='flex-1 px-1'>Phone Number</div>
+                            <div className='flex-1 px-1 text-black'>Phone Number</div>
                             <Input name="phoneNumber" placeholder='Enter your Mobile Number' required autoFocus={false} className='mt-1' value={formData.phoneNumber} onChange={handleChange} />
                         </div>
                     </div>
                 )}
-                <div className='flex-1 px-1 mt-2 mb-1'>Location</div>
+                <div className='flex-1 px-1 mt-2 mb-1 text-black'>Location</div>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '10px'}}>
                 <Select onValueChange={(value) => {setFormData(prevData => ({ ...prevData, state: value }))}}>
                     <SelectTrigger><SelectValue placeholder='State'></SelectValue></SelectTrigger>
@@ -248,18 +248,17 @@ export default function CampaignPage() {
 
             </div>
             <div className={`max-w-[30rem] w-full bg-white shadow-md rounded-3xl py-5 px-8 ${page === 3 ? "" : "hidden"}`}>
-                <div className="font-normal text-2xl text-center mb-4">Campaign Details</div>
+                <div className="font-normal text-2xl text-center mb-4 text-black">Campaign Details</div>
                 <div className='w-full h-[20vh] px-10'>
                     <div className='w-full border-2 border-black rounded-md border-dashed h-full grid place-content-center'>
                         <Input type='file'/>
                     </div>
                 </div>
                 <div className='w-full mt-2 flex-col gap-3'>
-                    <div className='flex-1 px-1'>Campaign Title</div>
-                    <Input name="campaign_name" placeholder='Enter Campaign Name' required autoFocus={false} className='mt-1' value={formData.campaign_name} onChange={handleChange} />
+                    <Input name="campaign_name" placeholder='Enter Campaign Name' required autoFocus={false} autoComplete='false' autoSave='false' className='mt-4 py-6 text-xl font-bold bg-white text-black focus:outline-0 border-b-2 border-black mb-6' value={formData.campaign_name} onChange={handleChange} />
                 </div>
                 <div className='w-full mt-2 flex-col gap-3 px-1'>
-                    <div className='flex-1'>Campaign Description</div>
+                    <div className='flex-1 text-black'>Campaign Description</div>
                     {/* <Input name="description" placeholder='Enter Campaign Description' required autoFocus={false} className='mt-1' value={formData.description} onChange={handleChange} multiple/> */}
                     <textarea
                     name="campaign_description"
@@ -270,14 +269,15 @@ export default function CampaignPage() {
                     value={formData.campaign_description}
                     onChange={handleTextAreaChange}
                     rows={5} // Specify the number of rows (lines) you want
-                    style={{width: '100%', padding: '5px'}}
+                    style={{width: '100%', padding: '10px', borderRadius: '10px', fontSize: '18px'}}
                     />
 
                 </div>
-                <div className='mt-2 w-full '>
-                    <Input type='number' placeholder='Enter Fund Amount You Want to Raise n Ruppees' name='amount' onChange={handleChange} value={formData.amount}/>
+                <div className='mt-2 w-full flex flex-col gap-1'>
+                    <div className='text-black'>Fund Target</div>
+                    <Input type='number' placeholder='Amount in Rupees' name='amount' className='text-lg font-bold tracking-widest py-6 bg-white text-black' onChange={handleChange} value={formData.amount}/>
                 </div>
-                <div className='w-full mt-2'>
+                <div className='w-full mt-4'>
                     <Button variant={'secondary'} className='w-full' onClick={handleSubmit}>Create Campaign</Button>
                 </div>
             </div>
