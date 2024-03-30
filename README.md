@@ -17,6 +17,7 @@ bun dev
 ## Visit URLs:
 ```
 To Add Post : /Campaigns
+To Use Chat : /chat
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
